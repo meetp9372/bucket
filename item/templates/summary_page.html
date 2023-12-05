@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary Page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #4472C4;
+        }
+
+        .element-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            border: 2px solid #000000;
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 40px; /* Add margin to separate the elements */
+        }
+
+        .total-cost {
+            font-size: 20px;
+            margin: 0; /* Remove default margin to ensure a neat appearance */
+        }
+
+        .back-button {
+            background-color: #F4823A;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            align-self: flex-end; /* Align to the right */
+        }
+    </style>
+</head>
+<body>
+    <div class="element-container">
+        <div class="container">
+            {% if items_total_cost %}
+                <p class="total-cost">Total cost: {{ items_total_cost }}</p> <!-- Replace with the actual value from your backend -->
+            {%  else %}
+                <p class="total-cost">Total cost: [Sum of all items]</p> <!-- Replace with the actual value from your backend -->
+            {% endif %}
+        </div>
+        <button onclick="goBack()" class="back-button">Back</button>
+    </div>
+    <script>
+        function goBack() {
+            // JavaScript function to go back to the previous page
+            window.location.href = "/item/home"
+        }
+    </script>
+</body>
+</html>

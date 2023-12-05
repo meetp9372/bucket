@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #4472C4;
+        }
+
+        .container {
+            width: 80%; /* Adjust as needed */
+            padding: 20px;
+            /* background-color: #4472C4;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #F4823A;
+            color: white;
+            padding: 10px;
+            border: none; /* Remove the border */
+            /* border-radius: 5px; */
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .summary-button {
+            float: none;
+            font-size: 20px;
+            text-align: center;
+            display: block; /* Ensure it's a block element */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+
+        /* Remove the border around the textboxes */
+        .container input {
+            border: none;
+            font-size: 20px; /* Set the text size */
+            color: #000000; /* Set the text color */
+            width: 100%; /* Make the input fields full width */
+        }
+
+        @media (max-width: 600px) {
+            /* Adjust styles for smaller screens */
+            .container {
+                width: 90%; /* Adjust as needed */
+            }
+
+            .summary-button {
+                float: none;
+                margin-top: 10px;
+            }
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <form id="itemForm" method="post">
+            {% csrf_token %}
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 20px;">Items</th>
+                        <th style="font-size: 20px;">Price (£)</th>
+                    </tr>
+                </thead>
+                <tbody id="itemList">
+                    <tr>
+                        <td style="font-size: 20px;"><input type="text" name="item_1" placeholder="Item"></td>
+                        <td style="font-size: 20px;"><input type="number" name="price_1" placeholder="Price"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" onclick="addRow()">+</button>
+            <button type="button" onclick="removeRow()">-</button>
+            <button type="submit" class="summary-button">Summary</button>
+            <input type="number" value=1 id="item_length" name="item_length" hidden>
+        </form>
+
+        <script>
+            function addRow() {
+                var table = document.getElementById("itemList");
+                var table_length = table.rows.length;
+                var newRow = table.insertRow(table_length);
+                var cell1 = newRow.insertCell(0);
+                var cell2 = newRow.insertCell(1);
+                var new_val = ++table_length;
+                cell1.innerHTML = '<input type="text" name="item_'+ new_val  +'" placeholder="Item">';
+                cell2.innerHTML = '<input type="number" name="price_'+ new_val +'" placeholder="Price">';
+                $("#item_length").val(new_val);
+            }
+
+            function removeRow() {
+                var table = document.getElementById("itemList");
+                if (table.rows.length > 1) {
+                    table.deleteRow(table.rows.length - 1);
+                    var table_length = table.rows.length;
+                    $("#item_length").val(table_length);
+                }
+            }
+             $(document).ready(function () {
+
+
+                // Attach a click event to the button
+                $('.summary-button').click(function () {
+                  var csrfToken = $("[name=csrfmiddlewaretoken]").val();
+                  var table = document.getElementById("itemList");
+                  var table_length = table.rows.length;
+
+                  var itemsData = [];
+
+                  // Iterate through rows and extract input values
+                  for (var i = 1; i <= table_length; i++) {
+                    var itemName = document.getElementsByName("item_" + i)[0].value;
+                    var itemPrice = document.getElementsByName("price_" + i)[0].value;
+
+                    // Add to the itemsData array
+                    itemsData.push({
+                      "name": itemName,
+                      "price": parseFloat(itemPrice) || 0  // Convert to float or default to 0
+                    });
+                  }
+
+                  // Make an AJAX request
+                  $.ajax({
+                    type: 'POST',  // Change the method as needed
+                    url: '/item/get_summary/',  // Change the URL to the endpoint you want to hit
+                    data: {
+                        csrfmiddlewaretoken: csrfToken,
+                        "items": JSON.stringify(itemsData),
+                    },
+                    dataType: 'json',  // Change the datatype as needed
+                    success: function (data) {
+                      // Handle success
+                        debugger;
+                      window.location = '/item/summary/';
+                      // You can update the UI or do something with the data here
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                      // Handle error
+                      console.error('Error:', textStatus, errorThrown);
+                      // You can display an error message or handle the error as needed
+                    }
+                  });
+                });
+              });
+        </script>
+    </div>
+</body>
+</html>
