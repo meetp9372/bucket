@@ -12,7 +12,8 @@ class ItemView(View):
 
         total_cost = 0
         for item_number in range(1, int(request.POST["item_length"])+1):
-            total_cost += float(request.POST[f"price_{item_number}"])
+            if request.POST[f"price_{item_number}"]:
+                total_cost += float(request.POST[f"price_{item_number}"])
 
         return render(request, 'summary_page.html', context={'items_total_cost': round(total_cost, 3)})
 
