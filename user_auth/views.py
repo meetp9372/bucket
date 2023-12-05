@@ -8,6 +8,8 @@ class LoginView(View):
     template_name = "login.html"
 
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('item/home')
         form = LoginForm()
         return render(request, self.template_name, {"form": form})
 
