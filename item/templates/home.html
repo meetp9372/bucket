@@ -15,11 +15,9 @@
         }
 
         .container {
-            width: 80%; /* Adjust as needed */
+            width: 80%;
             padding: 20px;
-            /* background-color: #4472C4;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+
         }
 
         table {
@@ -59,18 +57,16 @@
             float: none;
             font-size: 20px;
             text-align: center;
-            display: block; /* Ensure it's a block element */
+            display: block;
             margin-left: auto;
             margin-right: auto;
         }
 
-
-        /* Remove the border around the textboxes */
         .container input {
             border: none;
-            font-size: 20px; /* Set the text size */
-            color: #000000; /* Set the text color */
-            width: 100%; /* Make the input fields full width */
+            font-size: 20px;
+            color: #000000;
+            width: 100%;
         }
 
         @media (max-width: 600px) {
@@ -132,52 +128,7 @@
                     $("#item_length").val(table_length);
                 }
             }
-             $(document).ready(function () {
 
-
-                // Attach a click event to the button
-                $('.summary-button').click(function () {
-                  var csrfToken = $("[name=csrfmiddlewaretoken]").val();
-                  var table = document.getElementById("itemList");
-                  var table_length = table.rows.length;
-
-                  var itemsData = [];
-
-                  // Iterate through rows and extract input values
-                  for (var i = 1; i <= table_length; i++) {
-                    var itemName = document.getElementsByName("item_" + i)[0].value;
-                    var itemPrice = document.getElementsByName("price_" + i)[0].value;
-
-                    // Add to the itemsData array
-                    itemsData.push({
-                      "name": itemName,
-                      "price": parseFloat(itemPrice) || 0  // Convert to float or default to 0
-                    });
-                  }
-
-                  // Make an AJAX request
-                  $.ajax({
-                    type: 'POST',  // Change the method as needed
-                    url: '/item/get_summary/',  // Change the URL to the endpoint you want to hit
-                    data: {
-                        csrfmiddlewaretoken: csrfToken,
-                        "items": JSON.stringify(itemsData),
-                    },
-                    dataType: 'json',  // Change the datatype as needed
-                    success: function (data) {
-                      // Handle success
-                        debugger;
-                      window.location = '/item/summary/';
-                      // You can update the UI or do something with the data here
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                      // Handle error
-                      console.error('Error:', textStatus, errorThrown);
-                      // You can display an error message or handle the error as needed
-                    }
-                  });
-                });
-              });
         </script>
     </div>
 </body>

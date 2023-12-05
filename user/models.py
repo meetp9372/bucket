@@ -18,9 +18,6 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser):
 
-    # Remove the email field
-    # email = None
-
     username = models.CharField(max_length=30, unique=True)
 
     # Set the username as the USERNAME_FIELD

@@ -1,8 +1,3 @@
-from rest_framework import status, viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_exempt
-import json
 from django.shortcuts import render
 from django.views import View
 

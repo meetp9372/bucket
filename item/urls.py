@@ -4,7 +4,6 @@ from django.views.generic import TemplateView
 from item import views
 
 
-
 app_name = 'item'
 
 
